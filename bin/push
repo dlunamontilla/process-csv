@@ -1,6 +1,17 @@
+#!/usr/bin/env php
 <?php
+include dirname(__FILE__, 2) . "/vendor/autoload.php";
 
-include dirname(__FILE__, 1) . "/vendor/autoload.php";
+if (!function_exists("readline")) {
+    function readline($prompt = null) {
+        if ($prompt) {
+            echo $prompt;
+        }
+        $fp = fopen("php://stdin", "r");
+        $line = rtrim(fgets($fp, 1024));
+        return $line;
+    }
+}
 
 
 /**
@@ -13,7 +24,7 @@ function keyboardInput(): object {
      * @var string|FALSE
      */
     $table = FALSE;
-    
+
     /**
      * @var string|FALSE $filename
      */
@@ -21,12 +32,12 @@ function keyboardInput(): object {
 
     while ($table === FALSE || $filename === FALSE) {
         if ($table === FALSE) {
-            $table = readline("Ingrese el nombre de la tabla: ");
+            $table = \readline("Ingrese el nombre de la tabla: ");
             continue;
         }
 
         if ($filename === FALSE) {
-            $filename = readline("Ingrese el nombre del archivo a seleccionar: ");
+            $filename = \readline("Ingrese el nombre del archivo a seleccionar: ");
             continue;
         }
     }
@@ -43,7 +54,7 @@ use Data\ProcessCSV;
 
 $csv = new ProcessCSV($inputs->filename);
 
-$csv->render();
+$csv->render(",", 0);
 $it_saved = $csv->push((string) $inputs->table);
 
 if ($it_saved) {

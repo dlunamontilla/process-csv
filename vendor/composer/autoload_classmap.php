@@ -16,6 +16,5 @@ return array(
     'DLTools\\Models\\Authenticate' => $vendorDir . '/dlunamontilla/dltools/src/Models/Authenticate.php',
     'DLTools\\Models\\DLUser' => $vendorDir . '/dlunamontilla/dltools/src/Models/DLUser.php',
     'DLTools\\Models\\Database' => $vendorDir . '/dlunamontilla/dltools/src/Models/Database.php',
-    'Data\\ProcessCSV' => $baseDir . '/src/ProcessCSV.php',
-    'tpmanc\\imagick\\Imagick' => $vendorDir . '/tpmanc/yii2-imagick/Imagick.php',
+    'Shuchkin\\SimpleXLSX' => $vendorDir . '/shuchkin/simplexlsx/src/SimpleXLSX.php',
 );

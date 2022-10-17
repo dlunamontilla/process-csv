@@ -44,8 +44,7 @@ class ComposerStaticInit02c91c088b27196452adac789415051f
         'DLTools\\Models\\Authenticate' => __DIR__ . '/..' . '/dlunamontilla/dltools/src/Models/Authenticate.php',
         'DLTools\\Models\\DLUser' => __DIR__ . '/..' . '/dlunamontilla/dltools/src/Models/DLUser.php',
         'DLTools\\Models\\Database' => __DIR__ . '/..' . '/dlunamontilla/dltools/src/Models/Database.php',
-        'Data\\ProcessCSV' => __DIR__ . '/../..' . '/src/ProcessCSV.php',
-        'tpmanc\\imagick\\Imagick' => __DIR__ . '/..' . '/tpmanc/yii2-imagick/Imagick.php',
+        'Shuchkin\\SimpleXLSX' => __DIR__ . '/..' . '/shuchkin/simplexlsx/src/SimpleXLSX.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

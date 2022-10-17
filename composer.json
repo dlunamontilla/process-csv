@@ -14,11 +14,12 @@
         }
     ],
     "require": {
+        "shuchkin/simplexlsx": "^1.0",
         "dlunamontilla/dltools": "^0.0.18"
     },
 
     "scripts": {
-        "push": "php push.php",
+        "push": "bin/push",
         "configure": "php bin/connect-database"
     }
 }

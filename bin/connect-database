@@ -2,6 +2,18 @@
 
 <?php
 
+if (!function_exists("readline")) {
+    function readline($prompt = null) {
+        if ($prompt) {
+            echo $prompt;
+        }
+        $fp = fopen("php://stdin", "r");
+        $line = rtrim(fgets($fp, 1024));
+        return $line;
+    }
+}
+
+
 class Configure {
     private string $production;
     private string $host;
@@ -125,10 +137,10 @@ class Configure {
      * Verificar si lo que se pasa como argumento está definido
      * o se encuentra vacío.
      *
-     * @param string|array $empty
+     * @param string|int|array $empty
      * @return boolean
      */
-    private function empty(string|int|array $empty): bool {
+    private function empty($empty): bool {
         $exists = isset($empty);
         $is_empty = TRUE;
 
@@ -150,7 +162,7 @@ class Configure {
      * @param string|false $input
      * @return boolean
      */
-    private function isInput(string|false $input): bool {
+    private function isInput($input): bool {
         if (is_string($input)) {
             return !empty(trim($input));
         }
@@ -201,4 +213,3 @@ $is_it_configured = $install->config();
 if ($is_it_configured) {
     echo "\nSu proyecto se configuró correctamente\n\n";
 }
-

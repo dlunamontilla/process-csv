@@ -3,6 +3,8 @@
 namespace Data;
 
 use DLTools\Controllers\DLConfig;
+use Shuchkin\SimpleXLSX;
+
 
 class ProcessCSV extends DLConfig {
     /**
@@ -53,6 +55,13 @@ class ProcessCSV extends DLConfig {
      */
     private string $table = "table";
 
+    /**
+     * Undocumented variable
+     *
+     * @var SimpleXLSX|FALSE
+     */
+    private SimpleXLSX $dataExcel;
+
     private string $params;
     public function __construct(string $filename = "Data.csv") {
         $this->filename = dirname(__FILE__, 2) . "/$filename";
@@ -63,8 +72,15 @@ class ProcessCSV extends DLConfig {
 
     /**
      * Renderiza un archivo CSV a formato SQL
+     * 
+     * @param string $operator Separador de columna.
+     * @param string $limit Establece el límite de registro a insertar en la 
+     * tabla. El valor por defecto es `$limit = 0`. Cuando vale cero (0), entonces, registra todo
+     * el contenido de la hoja de cálculo.
+     * 
+     * > **Importante:** el límite solo tiene efecto para archivos de excel y no en formato CSV.
      */
-    public function render(string $separator = ","): void {
+    public function render(string $separator = ",", int $limit = 0): void {
         $data = [];
 
         if (!file_exists($this->filename)) {
@@ -73,6 +89,65 @@ class ProcessCSV extends DLConfig {
             exit;
         }
 
+        $type = $this->getType(
+            $this->getExtension($this->filename)
+        );
+        
+
+        if ($type === "csv") {
+            $this->parseCSV($separator);
+        }
+
+        if ($type === "excel") {
+            $this->parseExcel($limit);
+        }
+    }
+
+    /**
+     * Parsea un archivo de Excel para prepararlo para su inserción en una base de datos.
+     *
+     * @param integer $limit Establecer la cantidad de registro a insertar.
+     * @return void
+     */
+    private function parseExcel(int $limit = 0): void {
+        $excel = SimpleXLSX::parse($this->filename);
+
+        $this->dataExcel = $excel !== FALSE ? $excel : null;
+        
+        $columns = [];
+        $dataSQL = [];
+        $data = "";
+
+        foreach($this->dataExcel->rows(0, $limit) as $key => $register) {
+            $columns[] = $register;
+            $values = $this->createSQL($register);
+
+            if ($key > 0 && !empty(trim($values))) {
+                $dataSQL[] = $values;
+            }
+        }
+
+        $this->dataSQL = "VALUES " . join(", ", $dataSQL);
+        $header = array_shift($columns);
+
+        $this->columns = "(" . $this->createColumn($header) . ")";
+        $this->data = (object) $columns;
+
+        $fields = [];
+        foreach($header as $column) {
+            array_push($fields, ":$column");
+        }
+
+        $this->params = join(", ", $fields);
+    }
+
+    /**
+     * Parsear archivos CSV
+     * 
+     * @param string $separator Separador a utilizar para leer archivos CSV
+     * @return void
+     */
+    private function parseCSV(string $separator = ", "): void {
         $dataString = file_get_contents($this->filename);
         $lines = preg_split("/\n/", $dataString);
 
@@ -85,7 +160,7 @@ class ProcessCSV extends DLConfig {
 
             if ($key > 0) $dataSQL[] = $this->createSQL($columns);
         }
-        
+
         $header = array_shift($data);
         
         $fields = [];
@@ -147,10 +222,14 @@ class ProcessCSV extends DLConfig {
     private function createSQL(array $fields): string {
         $columns = [];
 
-        foreach($fields as $key => $field) {
-            if (is_array($field)) continue;
+        foreach($fields as $field) {
+            if (empty(trim($field))) {
+                return "";
+            }
+
             $columns[] = !is_numeric($field) ? "'$field'" : (float) $field;
         }
+
 
         return "(" . join(", ", $columns) . ")";
     }
@@ -212,5 +291,35 @@ class ProcessCSV extends DLConfig {
 
     public function getFormatRegisterCount(): string {
         return number_format($this->getRegisterCount(), 0, ",", ".");
+    }
+
+    private function getExtension(string $filename): string {
+        
+        /**
+         * Partes del nombre de archivo.
+         * 
+         * @var array $parts
+         */
+        $parts = preg_split("/\./", $filename);
+
+        /**
+         * Extensión del archivo
+         * 
+         * @var string $extension
+         */
+        $extension = $parts[count($parts) - 1];
+
+        return trim($extension);
+    }
+
+    private function getType(string $extension): string {
+
+        $types = [
+            "xls" => "excel",
+            "xlsx" => "excel",
+            "csv" => "csv"
+        ];
+
+        return $types[$extension] ?? 'Desconocido';
     }
 }

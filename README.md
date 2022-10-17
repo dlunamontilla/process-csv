@@ -66,9 +66,9 @@ $csv->render();
 
 4. Y por últilo, envíolo a la base de datos:
 
-```php
-$csv->push();
-```
+    ```php
+    $csv->push();
+    ```
 
 ## Uso en la terminal
 

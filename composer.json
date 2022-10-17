@@ -18,6 +18,7 @@
     },
 
     "scripts": {
-        "push": "php push.php"
+        "push": "php push.php",
+        "configure": "php bin/connect-database"
     }
 }

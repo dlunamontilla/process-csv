@@ -1,0 +1,204 @@
+#!/usr/bin/env php
+
+<?php
+
+class Configure {
+    private string $production;
+    private string $host;
+    private int $port;
+    private string $user;
+    private string $password;
+    private string $database;
+    private string $charset = "utf8";
+    private string $collation = "utf8_general_ci";
+
+    /**
+     * Prefijo que se usará en la base de datos
+     *
+     * @var string
+     */
+    private string $prefix = "dl";
+
+    /**
+     * Sistema de gestión de base de datos.
+     *
+     * @var string
+     */
+    private string $drive = "mysql";
+
+    /**
+     * Tabla para las pruebas automatizadas.
+     *
+     * @var string
+     */
+    private string $test_table = "tabla";
+
+    /**
+     * Nombre de la base de datos para las pruebas automatizadas.
+     *
+     * @var string
+     */
+    private string $test_database = "dbname";
+
+    public function __construct() {
+    }
+
+    /**
+     * Obtener los datos de la instalación
+     *
+     * @return object
+     */
+    private function getInstallation(): object {
+        do {
+            if (!isset($this->production) || $this->empty($this->production)) {
+                $production = readline("¿Es producción? (opcional) [s|n]: ");
+                $production = strtolower($production);
+
+                if ($production !== "s" && $production !== "n") {
+                    echo "Opción inválida\n";
+                    continue;
+                }
+
+                $is_production = $production === "s"
+                    ? "TRUE"
+                    : "FALSE";
+
+                $this->production = $is_production;
+            }
+
+            if (!isset($this->host) || $this->empty($this->host)) {
+                $host = readline("Host (opcional): ");
+                $this->host = $this->isInput($host) ? $host : "localhost";
+            }
+
+            if (!isset($this->user) || $this->empty($this->user)) {
+                $user = readline("Usuario de la base de datos (opcional): ");
+                $this->user = $this->isInput($user) ? $user : "root";
+            }
+
+            if (!isset($this->port)) {
+                $port = readline("Puerto (opcional): ");
+
+                if (!is_numeric($port) && !empty($port)) {
+                    echo "Puerto inválido\n";
+                    continue;
+                }
+
+                $this->port = $this->isInput($port) ? (int) $port : 3306;
+            }
+
+            if (!isset($password)) {
+                $password = readline("Ingrese una contraseña (opcional): ");
+                $this->password = $this->isInput($password) ? $password : "";
+            }
+
+            if (!isset($this->database) || $this->empty($this->database)) {
+                $database = readline("Base de datos: ");
+
+                if (!$this->isInput($database)) {
+                    continue;
+                }
+
+                $this->database = $database;
+            }
+
+            break;
+        } while (true);
+
+        return (object) [
+            "production" => $this->production,
+            "host" => $this->host,
+            "user" => $this->user,
+            "password" => $this->password,
+            "database" => $this->database,
+            "port" => $this->port,
+            "charset" => $this->charset,
+            "collation" => $this->collation,
+            "prefix" => $this->prefix,
+            "drive" => $this->drive,
+            "test_table" => $this->test_table,
+            "test_database" => $this->test_database
+        ];
+    }
+
+    /**
+     * Verificar si lo que se pasa como argumento está definido
+     * o se encuentra vacío.
+     *
+     * @param string|array $empty
+     * @return boolean
+     */
+    private function empty(string|int|array $empty): bool {
+        $exists = isset($empty);
+        $is_empty = TRUE;
+
+        if (is_array($empty)) {
+            $is_empty = empty($empty);
+        }
+
+        if (is_string($empty)) {
+            $is_empty = empty(trim($empty));
+        }
+
+
+        return !$exists || $is_empty;
+    }
+
+    /**
+     * Verifica si es una entrada válida de usuario
+     *
+     * @param string|false $input
+     * @return boolean
+     */
+    private function isInput(string|false $input): bool {
+        if (is_string($input)) {
+            return !empty(trim($input));
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Configura la conexión con el sistema de gestión 
+     * de base de datos creando el archivo .env en el directorio
+     * raíz del proyecto.
+     *
+     * @return boolean
+     */
+    public function config(): bool {
+        $data = $this->getInstallation();
+
+        $config = "DL_PRODUCTION = {$data->production}";
+        $config .= "\r\nDL_DATABASE_HOST = {$data->host}";
+        $config .= "\r\nDL_DATABASE_PORT = {$data->port}";
+        $config .= "\r\nDL_DATABASE_USER = {$data->user}";
+        $config .= "\r\nDL_DATABASE_PASSWORD = {$data->password}";
+        $config .= "\r\nDL_DATABASE_NAME = {$data->database}";
+        $config .= "\r\nDL_DATABASE_CHARSET = {$data->charset}";
+        $config .= "\r\nDL_DATABASE_COLLATION = {$data->collation}";
+        $config .= "\r\nDL_DATABASE_PREFIX = {$data->prefix}";
+        $config .= "\r\nDL_DATABASE_DRIVE = {$data->drive}";
+        $config .= "\r\n\r\n";
+        $config .= "\r\nTEST_TABLE_NAME = {$data->test_table}";
+        $config .= "\r\nTEST_DATABASE_NAME = {$data->test_database}";
+
+        $path = dirname(__DIR__);
+        $filename = "$path/.env";
+
+        if (!is_writable($path)) {
+            echo "Asegúrese que cuente con los permisos necesarios para crear el archivo .env";
+            exit(1);
+        }
+
+        return file_put_contents($filename, $config) !== FALSE;
+    }
+}
+
+
+$install = new Configure;
+$is_it_configured = $install->config();
+
+if ($is_it_configured) {
+    echo "\nSu proyecto se configuró correctamente\n\n";
+}
+

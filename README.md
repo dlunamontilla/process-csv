@@ -28,6 +28,12 @@ E Instale las dependencias:
 composer install
 ```
 
+Y por último, escriba la siguiente línea para configurar la conexión con la base de datos:
+
+```bash
+composer configure
+```
+
 ## Probar la herramienta
 
 Puede probar la escribiendo la siguiente línea:

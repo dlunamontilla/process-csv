@@ -1,0 +1,44 @@
+{
+    "name": "dlunamontilla/dltools",
+    "description": "Bibliteca para procesar peticiones de datos\"",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://aprendiendo.netlify.app/",
+
+    "autoload": {
+        "psr-4": {
+            "DLTools\\": "src/"
+        },
+
+        "classmap": [
+            "src/"
+        ]
+    },
+
+    "authors": [
+        {
+            "name": "David E Luna M",
+            "email": "davidlunamontilla@gmail.com",
+            "homepage": "https://aprendiendo.netlify.app/",
+            "role": "Developer"
+        }
+    ],
+
+    "minimum-stability": "dev",
+
+    "require": {
+        "php": ">=7.1.0",
+        "tpmanc/yii2-imagick": "*"
+    },
+
+    "config": {
+        "optimize-autoloader": true
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}

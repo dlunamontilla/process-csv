@@ -1,0 +1,23 @@
+{
+    "name": "dlunamontilla/data",
+    "description": "Herramienta para traducir e insertar todo el archivo CSV o Excel a una base de datos.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Data\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "David E Luna M",
+            "email": "davidlunamontilla@gmail.com"
+        }
+    ],
+    "require": {
+        "dlunamontilla/dltools": "^0.0.18"
+    },
+
+    "scripts": {
+        "push": "php push.php"
+    }
+}

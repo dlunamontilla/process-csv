@@ -1,0 +1,6 @@
+*.xls
+*.xlsx
+*.sql
+*.vendor
+info.txt
+*.csv

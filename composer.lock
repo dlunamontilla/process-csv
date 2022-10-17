@@ -1,0 +1,120 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "607c99d14e8dc06f9c494c8cf407867e",
+    "packages": [
+        {
+            "name": "dlunamontilla/dltools",
+            "version": "v0.0.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dlunamontilla/DLTools.git",
+                "reference": "b9cf73e34a86c52c30d71503c5a45f518609935e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dlunamontilla/DLTools/zipball/b9cf73e34a86c52c30d71503c5a45f518609935e",
+                "reference": "b9cf73e34a86c52c30d71503c5a45f518609935e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "tpmanc/yii2-imagick": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DLTools\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David E Luna M",
+                    "email": "davidlunamontilla@gmail.com",
+                    "homepage": "https://aprendiendo.netlify.app/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bibliteca para procesar peticiones de datos\"",
+            "homepage": "https://aprendiendo.netlify.app/",
+            "support": {
+                "issues": "https://github.com/dlunamontilla/DLTools/issues",
+                "source": "https://github.com/dlunamontilla/DLTools/tree/v0.0.18"
+            },
+            "time": "2022-07-29T19:45:02+00:00"
+        },
+        {
+            "name": "tpmanc/yii2-imagick",
+            "version": "1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tpmanc/yii2-imagick.git",
+                "reference": "be5f3c1dc1b1f18acde1f4672bf6d4dc77f2fd1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tpmanc/yii2-imagick/zipball/be5f3c1dc1b1f18acde1f4672bf6d4dc77f2fd1a",
+                "reference": "be5f3c1dc1b1f18acde1f4672bf6d4dc77f2fd1a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "tpmanc\\imagick\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "tpmanc",
+                    "email": "tpxtrime@mail.ru",
+                    "homepage": "https://tpmanc.github.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii 2 class for working with Imagick",
+            "homepage": "https://github.com/tpmanc/yii2-imagick",
+            "keywords": [
+                "imagick",
+                "yii",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/tpmanc/yii2-imagick/issues",
+                "source": "https://github.com/tpmanc/yii2-imagick/tree/1.3.2"
+            },
+            "time": "2019-12-10T08:54:28+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

@@ -60,9 +60,9 @@ Y Luego siga los pasos a continuación:
 
 3. Renderícelo:
 
-```php
-$csv->render();
-```
+    ```php
+    $csv->render();
+    ```
 
 4. Y por últilo, envíolo a la base de datos:
 

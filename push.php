@@ -32,8 +32,8 @@ function keyboardInput(): object {
     }
 
     return (object) [
-        "table" => $table,
-        "filename" => $filename 
+        "table" => !empty(trim($table)) ? $table : "data",
+        "filename" => !empty(trim($filename)) ? $filename : "test.csv",
     ];
 }
 

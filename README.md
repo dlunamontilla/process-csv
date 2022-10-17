@@ -2,6 +2,32 @@
 
 Toma los datos de un archivo de Excel o CSV y los convierte a una secuencia SQL que posteriormente se insertarán a la tabla elegida por el desarrollador.
 
+## Instalación
+
+Clone el repositorio:
+
+```bash
+git clone git@github.com:dlunamontilla/process-csv.git
+```
+
+O con HTTP:
+
+```bash
+git clone https://github.com/dlunamontilla/process-csv.git
+```
+
+Y después, ingrese al directorio:
+
+```bash
+cd process-csv
+```
+
+E Instale las dependencias:
+
+```bash
+composer install
+```
+
 ## Probar la herramienta
 
 Puede probar la escribiendo la siguiente línea:
@@ -53,4 +79,12 @@ $csv->render();
 
 ```php
 $csv->push();
+```
+
+## Uso en la terminal
+
+Para usarlo en la terminal, solo debes escribir la siguiente línea:
+
+```php
+composer push
 ```

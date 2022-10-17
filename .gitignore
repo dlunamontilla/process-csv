@@ -4,3 +4,4 @@
 *.vendor
 info.txt
 *.csv
+.env

@@ -53,6 +53,7 @@ $inputs = keyboardInput();
 use Data\ProcessCSV;
 
 $csv = new ProcessCSV($inputs->filename);
+$csv->setTable((string) $inputs->table);
 
 $csv->render(",", 0);
 $it_saved = $csv->push((string) $inputs->table);

@@ -223,15 +223,33 @@ class ProcessCSV extends DLConfig {
         $columns = [];
 
         foreach($fields as $field) {
+            
+            $column = !is_numeric($field) ? "$field" : (float) $field;
+            
+            $column = $this->sanitize($column);
+            
             if (empty(trim($field))) {
                 return "";
             }
 
-            $columns[] = !is_numeric($field) ? "'$field'" : (float) $field;
+            $column = "'$column'";
+            $columns[] = $column;
         }
 
 
         return "(" . join(", ", $columns) . ")";
+    }
+
+    /**
+     * Devuelte un texto un poco más sano.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function sanitize(string $text): string {
+        $text = preg_replace("/'/", "\\'", $text);
+        $text = preg_replace('/"/', '\\"', $text);
+        return trim($text);
     }
     
     /**
@@ -259,7 +277,11 @@ class ProcessCSV extends DLConfig {
 
         foreach($fields as $field) {
             if (!is_string($field)) continue;
-            $columns[] = trim($field);
+
+            $column = trim($field);
+            $column = $this->sanitize($column);
+
+            $columns[] = "`{$column}`";
         }
 
         return join(", ", $columns);
@@ -289,6 +311,11 @@ class ProcessCSV extends DLConfig {
         return trim($this->table);
     }
 
+    /**
+     * Devuelve la cantidad registros almacenados en la tabla en formato legible.
+     *
+     * @return string
+     */
     public function getFormatRegisterCount(): string {
         return number_format($this->getRegisterCount(), 0, ",", ".");
     }
@@ -312,6 +339,12 @@ class ProcessCSV extends DLConfig {
         return trim($extension);
     }
 
+    /**
+     * Devuelve la extensión del archivo a procesar.
+     *
+     * @param string $extension
+     * @return string
+     */
     private function getType(string $extension): string {
 
         $types = [
@@ -321,5 +354,9 @@ class ProcessCSV extends DLConfig {
         ];
 
         return $types[$extension] ?? 'Desconocido';
+    }
+
+    public function setTable(string $table): void {
+        $this->table = trim($table);
     }
 }

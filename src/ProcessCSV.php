@@ -209,4 +209,8 @@ class ProcessCSV extends DLConfig {
     public function getTable(): string {
         return trim($this->table);
     }
+
+    public function getFormatRegisterCount(): string {
+        return number_format($this->getRegisterCount(), 0, ",", ".");
+    }
 }

@@ -9,5 +9,6 @@ $csv->render();
 $it_saved = $csv->push("data");
 
 if ($it_saved) {
-    echo "Se almacenaron " . $csv->getRegisterCount() . " registros a la tabla " . $csv->getTable();
+    echo "\nSe almacenaron: \e[92m" . $csv->getFormatRegisterCount() . "\e[93m registros a la tabla " . $csv->getTable();
+    echo "\n\n";
 }

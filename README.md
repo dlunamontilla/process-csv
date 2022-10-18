@@ -2,8 +2,6 @@
 
 Toma los datos de un archivo de Excel o CSV y los convierte a una secuencia SQL que posteriormente se insertarán a la tabla elegida por el desarrollador.
 
-> **Importante:** se está implementando en este momento la capacidad de lectura de archivos en formato Excel.
-
 ## Instalación
 
 Clone el repositorio:

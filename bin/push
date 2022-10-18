@@ -56,7 +56,7 @@ $csv = new ProcessCSV($inputs->filename);
 $csv->setTable((string) $inputs->table);
 
 $csv->render(",", 0);
-$it_saved = $csv->push((string) $inputs->table);
+$it_saved = $csv->push();
 
 if ($it_saved) {
     echo "\nSe almacenaron: \e[92m" . $csv->getFormatRegisterCount() . "\e[93m registros a la tabla " . $csv->getTable();

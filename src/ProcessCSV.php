@@ -116,7 +116,6 @@ class ProcessCSV extends DLConfig {
         
         $columns = [];
         $dataSQL = [];
-        $data = "";
 
         foreach($this->dataExcel->rows(0, $limit) as $key => $register) {
             $columns[] = $register;
@@ -129,6 +128,10 @@ class ProcessCSV extends DLConfig {
 
         $this->dataSQL = "VALUES " . join(", ", $dataSQL);
         $header = array_shift($columns);
+
+        $matches = $this->getColumnsMatch($header);
+
+        
 
         $this->columns = "(" . $this->createColumn($header) . ")";
         $this->data = (object) $columns;
@@ -147,7 +150,7 @@ class ProcessCSV extends DLConfig {
      * @param string $separator Separador a utilizar para leer archivos CSV
      * @return void
      */
-    private function parseCSV(string $separator = ", "): void {
+    private function parseCSV(string $separator = ","): void {
         $dataString = file_get_contents($this->filename);
         $lines = preg_split("/\n/", $dataString);
 
@@ -255,19 +258,19 @@ class ProcessCSV extends DLConfig {
     /**
      * Envía el contenido de un archivo CSV a la base de datos.
      *
-     * @param string $table
+     * @param ?string $table
      * @return boolean
      */
-    public function push(string $table = "data"): bool {
-        $this->table = trim($table);
+    public function push(?string $table = NULL): bool {
+        if ($table) $this->table = trim($table);
 
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) AS cantidad FROM $table");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) AS cantidad FROM {$this->table}");
         $stmt->execute();
 
         $registerCount = (object) $stmt->fetch(\PDO::FETCH_ASSOC);
         $this->registerCount = $registerCount->cantidad ?? 0;
 
-        $query = "INSERT INTO $table {$this->columns} {$this->dataSQL}";
+        $query = "INSERT INTO {$this->table} {$this->columns} {$this->dataSQL}";
         $stmt = $this->pdo->prepare($query);
         return $stmt->execute();
     }
@@ -356,7 +359,56 @@ class ProcessCSV extends DLConfig {
         return $types[$extension] ?? 'Desconocido';
     }
 
+    /**
+     * Seleccionar la tabla que va a usar.
+     *
+     * @param string $table
+     * @return void
+     */
     public function setTable(string $table): void {
         $this->table = trim($table);
+    }
+
+    /**
+     * Devuelve las columnas de la tabla elegida.
+     *
+     * @return array
+     */
+    private function getDatabaseColumns(): array {
+        $query = "DESCRIBE " . $this->sanitize($this->table);
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $attributes = [];
+
+        foreach($data as $attribute) {
+            $attribute = (object) $attribute;
+            $attributes[] = $attribute->Field;
+        }
+
+        return $attributes ?? [];
+    }
+
+    /**
+     * Devuelve las columnas interceptadas de la hoja de cálculo y una tabla de la base de datos.
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function getColumnsMatch(array $columns): array {
+        $matches = [];
+        $databasesColumns = $this->getDatabaseColumns();
+
+        foreach($columns as $field) {
+            $found = in_array("Columna1", $databasesColumns);
+
+            if ($found) {
+                $matches[] = $field;
+            }
+        }
+
+        return $matches ?? [];
     }
 }

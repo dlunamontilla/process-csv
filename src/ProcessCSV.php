@@ -131,7 +131,9 @@ class ProcessCSV extends DLConfig {
 
         $matches = $this->getColumnsMatch($header);
 
-        
+        print_r($matches);
+        echo "\n\n";
+        exit;
 
         $this->columns = "(" . $this->createColumn($header) . ")";
         $this->data = (object) $columns;
